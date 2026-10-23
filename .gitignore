@@ -1,0 +1,39 @@
+# .NET build output
+bin/
+obj/
+artifacts/
+publish/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+
+# IDEs
+.vs/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# Test results
+TestResults/
+coverage/
+*.trx
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Packaging
+*.dmg
+*.pkg
+Releases/
+
+# Secrets
+.env
+.env.*
+*.pfx
+*.p12
+
+# Claude Code local settings (personal, not shared)
+.claude/settings.local.json

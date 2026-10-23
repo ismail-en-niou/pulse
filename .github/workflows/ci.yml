@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for solution
+        id: sln
+        shell: bash
+        run: |
+          if [ -f Pulse.slnx ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; echo "No Pulse.slnx yet - skipping build."; fi
+
+      - uses: actions/setup-dotnet@v4
+        if: steps.sln.outputs.exists == 'true'
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build
+        if: steps.sln.outputs.exists == 'true'
+        run: dotnet build Pulse.slnx --configuration Release
+
+      - name: Test
+        if: steps.sln.outputs.exists == 'true'
+        run: dotnet test Pulse.slnx --configuration Release --no-build

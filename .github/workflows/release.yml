@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+          - os: macos-latest
+            rid: osx-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for app project
+        id: app
+        shell: bash
+        run: |
+          if [ -f src/Pulse.App/Pulse.App.csproj ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; echo "No app yet - release will contain source only."; fi
+
+      - uses: actions/setup-dotnet@v4
+        if: steps.app.outputs.exists == 'true'
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish
+        if: steps.app.outputs.exists == 'true'
+        shell: bash
+        run: |
+          dotnet publish src/Pulse.App/Pulse.App.csproj -c Release -r ${{ matrix.rid }} --self-contained -o out/Pulse-${{ matrix.rid }}
+          cd out && 7z a ../Pulse-${{ github.ref_name }}-${{ matrix.rid }}.zip Pulse-${{ matrix.rid }} || zip -r ../Pulse-${{ github.ref_name }}-${{ matrix.rid }}.zip Pulse-${{ matrix.rid }}
+
+      - uses: actions/upload-artifact@v4
+        if: steps.app.outputs.exists == 'true'
+        with:
+          name: Pulse-${{ matrix.rid }}
+          path: Pulse-*.zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Pulse ${{ github.ref_name }}
+          generate_release_notes: true
+          prerelease: ${{ startsWith(github.ref_name, 'v0.') }}
+          files: dist/*
+          fail_on_unmatched_files: false
