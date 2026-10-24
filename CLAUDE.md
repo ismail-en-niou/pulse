@@ -4,7 +4,8 @@ Pulse is an open-source Dynamic Island for developers on Windows and macOS. A pi
 
 ## Current state
 
-Scaffold only (v0.0.1). No source code yet. The next step is milestone 1: `/m1-spike`.
+Milestone 1 spike done (v0.1, unreleased) in `spike/Pulse.Spike`: transparent pill at top-center, notch placement on macOS, spring hover animation, click-through when collapsed, no focus stealing. Windows is verified by an automated smoke test. The macOS checklist on real hardware is still pending. `spike/README.md` has the results and the findings that shape milestone 2.
+The next step is the macOS check, then milestone 2: `/m2-foundation`.
 Update this section at the end of every milestone.
 
 ## Stack

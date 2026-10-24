@@ -11,7 +11,7 @@ Pulse is a small pill at the top of your screen (in the notch on Mac, floating t
 - **Focus timer** — a countdown in the pill; only important events can interrupt
 - **Anything else** — push your own activities from any script with the `pulse` CLI
 
-> Status: **early development** (v0.0.1 is the project scaffold). See the [roadmap](docs/ROADMAP.md).
+> Status: **early development**. The milestone 1 spike (the pill window on Windows and macOS) is in [`spike/`](spike/README.md). See the [roadmap](docs/ROADMAP.md).
 
 ## Why Pulse?
 
