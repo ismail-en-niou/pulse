@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:island="using:Pulse.App.Island"
         x:Class="Pulse.App.Island.IslandWindow"
         Title="Pulse"
         WindowDecorations="None"
@@ -12,23 +13,49 @@
     <!-- Outline of the whole window (debug-bounds flag), to see where clicks must pass through. -->
     <Border x:Name="DebugBounds" BorderBrush="#B0FF3B30" BorderThickness="1" IsVisible="False" />
 
+    <!-- The glow is drawn inside the pill: at rest the Windows window region clips anything outside it. -->
     <Border x:Name="Pill"
             Background="Black"
+            BorderBrush="Transparent"
+            BorderThickness="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             ClipToBounds="True">
-      <StackPanel x:Name="ExpandedContent"
-                  Width="380"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Top"
-                  Spacing="4"
-                  Opacity="0">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <Ellipse Width="10" Height="10" Fill="#0A84FF" VerticalAlignment="Center" />
-          <TextBlock Text="Pulse" FontSize="16" FontWeight="SemiBold" Foreground="White" />
+      <Border.Transitions>
+        <Transitions>
+          <BrushTransition Property="BorderBrush" Duration="0:0:0.3" />
+          <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.3" />
+        </Transitions>
+      </Border.Transitions>
+
+      <Panel>
+        <!-- Collapsed: icon, title and progress. On notched Macs only the ears beside the notch hold content. -->
+        <Panel x:Name="CompactLayer" HorizontalAlignment="Center" VerticalAlignment="Top">
+          <Grid x:Name="Compact" Opacity="0">
+            <Grid.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.12" />
+              </Transitions>
+            </Grid.Transitions>
+            <island:StateIcon x:Name="CompactIcon" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock x:Name="CompactTitle" Grid.Column="1" Margin="8,0" VerticalAlignment="Center"
+                       FontSize="13" FontWeight="SemiBold" Foreground="White" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="CompactTrailing" Grid.Column="2" VerticalAlignment="Center"
+                       FontSize="12" Foreground="#B3FFFFFF" TextTrimming="CharacterEllipsis" />
+          </Grid>
+        </Panel>
+
+        <!-- Expanded: the recent activities. -->
+        <StackPanel x:Name="ExpandedContent" HorizontalAlignment="Center" VerticalAlignment="Top" Opacity="0">
+          <StackPanel x:Name="Rows" Spacing="2" />
+          <TextBlock x:Name="MoreLabel" Height="20" IsVisible="False" Padding="26,4,0,0" FontSize="11" Foreground="#8CFFFFFF" />
+          <StackPanel x:Name="EmptyState" Height="44" VerticalAlignment="Center" Spacing="2">
+            <TextBlock Text="No activities" FontSize="13" FontWeight="SemiBold" Foreground="#B3FFFFFF" Margin="0,4,0,0" />
+            <TextBlock Text="pulse start &quot;Training model&quot;" FontSize="11" Foreground="#73FFFFFF"
+                       FontFamily="Cascadia Mono,Consolas,Menlo,monospace" />
+          </StackPanel>
         </StackPanel>
-        <TextBlock x:Name="Diagnostics" FontSize="12" Foreground="#B3FFFFFF" TextWrapping="Wrap" />
-      </StackPanel>
+      </Panel>
     </Border>
   </Panel>
 </Window>

@@ -25,12 +25,15 @@ internal static class Program
         using var activities = new ActivityService(settings);
         using var api = LocalApi.TryStart(activities, PlatformFactory.CreateFileWriter(), PulsePaths.Connection);
 
-        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        BuildAvaloniaApp(activities).StartWithClassicDesktopLifetime(args);
         return 0;
     }
 
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<App>()
+    /// <summary>Used by the XAML previewer.</summary>
+    public static AppBuilder BuildAvaloniaApp() => BuildAvaloniaApp(null);
+
+    private static AppBuilder BuildAvaloniaApp(ActivityService? activities) =>
+        AppBuilder.Configure(() => new App { Activities = activities })
             .UsePlatformDetect()
             .With(new MacOSPlatformOptions
             {
