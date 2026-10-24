@@ -56,4 +56,44 @@ internal static partial class Win32
     [LibraryImport("gdi32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool DeleteObject(nint hObject);
+
+    public const uint CRED_TYPE_GENERIC = 1;
+    public const uint CRED_PERSIST_LOCAL_MACHINE = 2;
+    public const int CRED_MAX_CREDENTIAL_BLOB_SIZE = 5 * 512;
+    public const int ERROR_NOT_FOUND = 1168;
+
+    /// <summary>CREDENTIALW with the strings as pointers, so the struct stays blittable.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    public struct CREDENTIAL
+    {
+        public uint Flags;
+        public uint Type;
+        public nint TargetName;
+        public nint Comment;
+        public uint LastWrittenLow; // FILETIME
+        public uint LastWrittenHigh;
+        public uint CredentialBlobSize;
+        public nint CredentialBlob;
+        public uint Persist;
+        public uint AttributeCount;
+        public nint Attributes;
+        public nint TargetAlias;
+        public nint UserName;
+    }
+
+    [LibraryImport("advapi32.dll", EntryPoint = "CredWriteW", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool CredWrite(in CREDENTIAL credential, uint flags);
+
+    /// <summary>On success, free <paramref name="credential"/> with <see cref="CredFree"/>.</summary>
+    [LibraryImport("advapi32.dll", EntryPoint = "CredReadW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool CredRead(string targetName, uint type, uint flags, out nint credential);
+
+    [LibraryImport("advapi32.dll", EntryPoint = "CredDeleteW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool CredDelete(string targetName, uint type, uint flags);
+
+    [LibraryImport("advapi32.dll")]
+    public static partial void CredFree(nint buffer);
 }

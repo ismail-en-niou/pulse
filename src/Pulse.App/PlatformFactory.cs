@@ -19,4 +19,7 @@ internal static class PlatformFactory
 
         return new NullIslandPlacement(window);
     }
+
+    public static IUserOnlyFileWriter CreateFileWriter() =>
+        OperatingSystem.IsWindows() ? new WindowsUserOnlyFileWriter() : new PosixUserOnlyFileWriter();
 }
