@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Pulse.Platform.Mac\Pulse.Platform.Mac.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Pulse.Tests" />
+  </ItemGroup>
+
 </Project>

@@ -11,4 +11,8 @@
     <ProjectReference Include="..\Pulse.Core\Pulse.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Pulse.Tests" />
+  </ItemGroup>
+
 </Project>
