@@ -1,0 +1,36 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Pulse.Spike.IslandWindow"
+        Title="Pulse spike"
+        WindowDecorations="None"
+        Background="Transparent"
+        ShowActivated="False"
+        CanResize="False"
+        SizeToContent="Manual"
+        WindowStartupLocation="Manual">
+  <Panel>
+    <!-- Outline of the whole window (debug-bounds flag), to see where clicks must pass through. -->
+    <Border x:Name="DebugBounds" BorderBrush="#B0FF3B30" BorderThickness="1" IsVisible="False" />
+
+    <Border x:Name="Pill"
+            Background="Black"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            ClipToBounds="True">
+      <StackPanel x:Name="ExpandedContent"
+                  Width="380"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Top"
+                  Spacing="4"
+                  Opacity="0">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Ellipse Width="10" Height="10" Fill="#0A84FF" VerticalAlignment="Center" />
+          <TextBlock Text="Pulse spike" FontSize="16" FontWeight="SemiBold" Foreground="White" />
+        </StackPanel>
+        <TextBlock x:Name="Diagnostics" FontSize="12" Foreground="#B3FFFFFF" TextWrapping="Wrap" />
+        <TextBlock Text="Move the mouse away to collapse. Ctrl+C in the terminal quits."
+                   FontSize="12" Foreground="#80FFFFFF" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+  </Panel>
+</Window>
