@@ -32,6 +32,9 @@ internal static class IslandPlatform
         if (OperatingSystem.IsWindows())
             return new WindowsIslandPlatform(window);
 
+        if (OperatingSystem.IsMacOS())
+            return new MacIslandPlatform(window, options.MacNonActivating);
+
         return new NullIslandPlatform(window);
     }
 }

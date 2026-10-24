@@ -11,7 +11,13 @@ internal static class Program
     public static AppBuilder BuildAvaloniaApp() =>
         AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            // Accessory app on macOS: no Dock icon, not in Cmd+Tab, and allowed over other apps' full-screen Spaces.
-            .With(new MacOSPlatformOptions { ShowInDock = false })
+            .With(new MacOSPlatformOptions
+            {
+                // Accessory app: no Dock icon, not in Cmd+Tab, and allowed over other apps' full-screen Spaces.
+                ShowInDock = false,
+                // Avalonia's app delegate activates the app (and briefly the Dock) at launch, which would take
+                // focus from the user's window. The island needs none of the delegate's events.
+                DisableAvaloniaAppDelegate = true,
+            })
             .LogToTrace();
 }
