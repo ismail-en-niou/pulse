@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- xunit v3 test projects are executables. -->
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- mtp-off keeps VSTest mode, so `dotnet test Pulse.slnx` works as documented in CLAUDE.md. -->
+    <PackageReference Include="xunit.v3.mtp-off" Version="4.0.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Pulse.Core\Pulse.Core.csproj" />
+    <ProjectReference Include="..\..\src\Pulse.Cli\Pulse.Cli.csproj" />
+    <ProjectReference Include="..\..\src\Pulse.App\Pulse.App.csproj" />
+    <ProjectReference Include="..\..\src\Pulse.Platform.Windows\Pulse.Platform.Windows.csproj" />
+    <ProjectReference Include="..\..\src\Pulse.Platform.Mac\Pulse.Platform.Mac.csproj" />
+  </ItemGroup>
+
+</Project>

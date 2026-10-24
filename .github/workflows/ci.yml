@@ -15,21 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check for solution
-        id: sln
-        shell: bash
-        run: |
-          if [ -f Pulse.slnx ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; echo "No Pulse.slnx yet - skipping build."; fi
-
       - uses: actions/setup-dotnet@v4
-        if: steps.sln.outputs.exists == 'true'
         with:
           dotnet-version: 10.0.x
 
       - name: Build
-        if: steps.sln.outputs.exists == 'true'
         run: dotnet build Pulse.slnx --configuration Release
 
+      # Tests that touch the real keychain, Credential Manager or login items skip themselves when CI is set.
       - name: Test
-        if: steps.sln.outputs.exists == 'true'
         run: dotnet test Pulse.slnx --configuration Release --no-build

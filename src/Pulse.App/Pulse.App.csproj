@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Debug builds keep a console for the event log and Ctrl+C; release builds are a normal GUI app. -->
+    <OutputType>WinExe</OutputType>
+    <OutputType Condition="'$(Configuration)' == 'Debug'">Exe</OutputType>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Kestrel for the local API. -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pulse.Core\Pulse.Core.csproj" />
+    <ProjectReference Include="..\Pulse.Platform.Windows\Pulse.Platform.Windows.csproj" />
+    <ProjectReference Include="..\Pulse.Platform.Mac\Pulse.Platform.Mac.csproj" />
+  </ItemGroup>
+
+</Project>
