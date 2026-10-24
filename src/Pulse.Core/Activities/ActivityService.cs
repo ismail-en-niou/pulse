@@ -19,6 +19,7 @@ public sealed class ActivityService : IDisposable
     private readonly TimeSpan _finishedLifetime;
     private readonly ITimer _expiryTimer;
     private long _version;
+    private DateTimeOffset _lastCreatedAt = DateTimeOffset.MinValue;
 
     public ActivityService(PulseSettings settings, TimeProvider? time = null)
     {
@@ -37,7 +38,15 @@ public sealed class ActivityService : IDisposable
     }
 
     public ActivityResult Create(CreateActivityRequest request) =>
-        Change(now => ActivityRules.Create(request, NewId(), now));
+        Change(now =>
+        {
+            // Two creates within one clock tick would tie, leaving display order and "latest" to chance.
+            var createdAt = now > _lastCreatedAt ? now : _lastCreatedAt.AddTicks(1);
+            var result = ActivityRules.Create(request, NewId(), createdAt);
+            if (result.IsSuccess)
+                _lastCreatedAt = createdAt;
+            return result;
+        });
 
     /// <param name="id">An activity id, or <see cref="ApiRoutes.Latest"/>.</param>
     /// <param name="latestSource">Source used to resolve <see cref="ApiRoutes.Latest"/>.</param>

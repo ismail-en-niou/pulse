@@ -59,6 +59,18 @@ public sealed class ActivityServiceTests : IDisposable
     }
 
     [Fact]
+    public void Activities_created_in_the_same_instant_keep_their_order()
+    {
+        var ids = Enumerable.Range(0, 20).Select(i => Start($"job {i}").Id).ToList();
+
+        Assert.Equal(Enumerable.Range(0, 20).Reverse().Select(i => $"job {i}"), Titles());
+        Assert.All(_service.Snapshot().Zip(_service.Snapshot().Skip(1)), pair => Assert.True(pair.First.CreatedAt > pair.Second.CreatedAt));
+
+        var progress = _service.Update(ApiRoutes.Latest, new UpdateActivityRequest(Progress: 10), "cli");
+        Assert.Equal(ids[^1], progress.Activity!.Id);
+    }
+
+    [Fact]
     public void Latest_without_an_unfinished_activity_is_not_found()
     {
         var only = Start("only");
