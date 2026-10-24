@@ -9,13 +9,7 @@ internal interface IIslandPlatform : IDisposable
     /// <summary>How clicks outside the pill reach the windows behind it, for the diagnostics line.</summary>
     string ClickThroughMode { get; }
 
-    /// <summary>
-    /// True when the platform reports the cursor through <see cref="PointerMoved"/> itself,
-    /// instead of the window relying on Avalonia pointer events.
-    /// </summary>
-    bool TracksPointer { get; }
-
-    /// <summary>Cursor position in window coordinates.</summary>
+    /// <summary>Cursor position in window coordinates, or null when the cursor has left the window.</summary>
     event Action<Point?>? PointerMoved;
 
     /// <summary>The primary screen's notch, or null when it has none.</summary>
@@ -33,5 +27,11 @@ internal interface IIslandPlatform : IDisposable
 
 internal static class IslandPlatform
 {
-    public static IIslandPlatform Create(Window window, SpikeOptions options) => new NullIslandPlatform(window);
+    public static IIslandPlatform Create(Window window, SpikeOptions options)
+    {
+        if (OperatingSystem.IsWindows())
+            return new WindowsIslandPlatform(window);
+
+        return new NullIslandPlatform(window);
+    }
 }

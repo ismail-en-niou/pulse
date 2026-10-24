@@ -26,16 +26,7 @@ public partial class IslandWindow : Window
         // Size and position before Show(), so the window never appears anywhere else first.
         ApplyLayout();
         _controller = new IslandController(this, _platform, _layout, ApplyFrame);
-
-        if (_platform.TracksPointer)
-        {
-            _platform.PointerMoved += _controller.OnPointer;
-        }
-        else
-        {
-            PointerMoved += (_, e) => _controller.OnPointer(e.GetPosition(this));
-            PointerExited += (_, _) => _controller.OnPointer(null);
-        }
+        _platform.PointerMoved += _controller.OnPointer;
 
         Opened += (_, _) =>
         {

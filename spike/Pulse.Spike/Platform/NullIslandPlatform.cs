@@ -10,17 +10,13 @@ internal sealed class NullIslandPlatform : IIslandPlatform
     {
         window.Topmost = true;
         window.ShowInTaskbar = false;
+        window.PointerMoved += (_, e) => PointerMoved?.Invoke(e.GetPosition(window));
+        window.PointerExited += (_, _) => PointerMoved?.Invoke(null);
     }
 
     public string ClickThroughMode => "no click-through";
 
-    public bool TracksPointer => false;
-
-    public event Action<Point?>? PointerMoved
-    {
-        add { }
-        remove { }
-    }
+    public event Action<Point?>? PointerMoved;
 
     public NotchInfo? DetectNotch() => null;
 
