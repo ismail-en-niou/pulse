@@ -13,7 +13,14 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(dotnet build *)",
+      "Bash(sed -i -e 's/EnumWindows\\(\\(h, _\\) => { GetWindowThreadProcessId\\(h, out var p\\); if \\(p == pid\\) result.Add\\(h\\); return true; }, IntPtr.Zero\\);/EnumWindows\\(delegate \\(IntPtr h, IntPtr l\\) { uint p; GetWindowThreadProcessId\\(h, out p\\); if \\(p == pid\\) result.Add\\(h\\); return true; }, IntPtr.Zero\\);/' -e 's/        GetWindowRect\\(h, out var r\\);/        RECT r; GetWindowRect\\(h, out r\\);/' -e 's/        var kind = GetWindowRgnBox\\(h, out var r\\);/        RECT r; var kind = GetWindowRgnBox\\(h, out r\\);/' Win32Probe.cs)",
+      "Bash(grep -nE \"out var|=>\" Win32Probe.cs)",
+      "Bash(git checkout *)",
+      "Bash(dotnet new *)",
+      "Bash(dotnet sln *)",
+      "Bash(dotnet test *)"
     ],
     "deny": [
       "Read(./.env)",
